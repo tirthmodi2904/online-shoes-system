@@ -11,23 +11,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['start_datetime']) && i
         FROM users 
         INNER JOIN users_orders ON users.u_id = users_orders.u_id 
         WHERE users_orders.date BETWEEN '$start_date' AND '$end_date'";
-$query = mysqli_query($db, $sql);
-$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-// Set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('UrbanKicks');
-$pdf->SetTitle('Orders Report');
-$pdf->SetSubject('Orders Report');
-$pdf->SetKeywords('TCPDF, PDF, Orders, Report');
-// Add a page
-$pdf->AddPage();
-// Add content to PDF
-$content = '<h1 style="text-align: center; font-family: Arial, sans-serif;">UrbanKicks Orders Summary Report</h1>';
-$content .= '<p><strong>Date Of Order Summary</strong></p>';
-$content .= '<p>Start Date: ' . $start_date . '';
-$content .= '  End Date: ' . $end_date . '</p>';
-$content .= '<table style="width: 100%; border-collapse: collapse; font-family: dejavusans, sans-serif;">';
-$content .= '<tr>
+    $query = mysqli_query($db, $sql);
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    // Set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('UrbanKicks');
+    $pdf->SetTitle('Orders Report');
+    $pdf->SetSubject('Orders Report');
+    $pdf->SetKeywords('TCPDF, PDF, Orders, Report');
+    // Add a page
+    $pdf->AddPage();
+    // Add content to PDF
+    $content = '<h1 style="text-align: center; font-family: Arial, sans-serif;">UrbanKicks Orders Summary Report</h1>';
+    $content .= '<p><strong>Date Of Order Summary</strong></p>';
+    $content .= '<p>Start Date: ' . $start_date . '';
+    $content .= '  End Date: ' . $end_date . '</p>';
+    $content .= '<table style="width: 100%; border-collapse: collapse; font-family: dejavusans, sans-serif;">';
+    $content .= '<tr>
                 <th style="border: 1px solid #ddd; padding: 8px;">User</th>
                 <th style="border: 1px solid #ddd; padding: 8px;">Title</th>
                 <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
@@ -37,22 +37,22 @@ $content .= '<tr>
                 <th style="border: 1px solid #ddd; padding: 8px;">Address</th>
                 <th style="border: 1px solid #ddd; padding: 8px;">Date-Time</th>
             </tr>';
-while ($row = mysqli_fetch_assoc($query)) {
-    // Handle missing data gracefully
-    $username = isset($row['username']) ? $row['username'] : 'N/A';
-    $address = isset($row['address']) ? $row['address'] : 'N/A';
-    $content .= '<tr>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $username . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['title'] . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['quantity'] . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['shoe_size'] . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">₹' . $row['price'] . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">₹' . $row['price']*$row['quantity'] . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $address . '</td>';
-    $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['date'] . '</td>';
-    $content .= '</tr>';
-}
-$content .= '</table>';
+    while ($row = mysqli_fetch_assoc($query)) {
+        // Handle missing data gracefully
+        $username = isset($row['username']) ? $row['username'] : 'N/A';
+        $address = isset($row['address']) ? $row['address'] : 'N/A';
+        $content .= '<tr>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $username . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['title'] . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['quantity'] . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['shoe_size'] . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">₹' . $row['price'] . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">₹' . $row['price'] * $row['quantity'] . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $address . '</td>';
+        $content .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $row['date'] . '</td>';
+        $content .= '</tr>';
+    }
+    $content .= '</table>';
     // Output content to PDF
     $pdf->writeHTML($content, true, false, true, false, '');
     // Output PDF as a download
@@ -62,4 +62,3 @@ $content .= '</table>';
     header("Location: all_orders.php");
     exit();
 }
-?>

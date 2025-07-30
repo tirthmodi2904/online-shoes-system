@@ -1,9 +1,32 @@
 <?php
 session_start();
 
-// Include database connection
 include("connection/connect.php");
+error_reporting(0);
+session_start();
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if (!empty($_POST["submit"])) {
+        $loginquery = "SELECT * FROM users WHERE username='$username'"; // select matching records
+        $result = mysqli_query($db, $loginquery); // executing
+
+        if ($row = mysqli_fetch_assoc($result)) {
+            if (password_verify($password, $row['password'])) {
+                $_SESSION["user_id"] = $row['u_id'];
+                header("Location: index.php");
+                exit();
+            } else {
+                $message = "Invalid Password!";
+            }
+        } else {
+            $message = "Invalid Username!";
+        }
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,23 +49,28 @@ include("connection/connect.php");
             color: #fff;
             background-color: #5c4ac7;
         }
+
         .transparent-input {
-        background-color: white;
-        border: 1px solid;
-        border-radius:5px;
+            background-color: white;
+            border: 1px solid;
+            border-radius: 5px;
         }
-        .text-center{
-        color:white;
+
+        .text-center {
+            color: white;
         }
-        input{
-            border-radius:10%;
+
+        input {
+            border-radius: 10%;
         }
-        .btn{
-        border-radius:5px;
+
+        .btn {
+            border-radius: 5px;
         }
-        img{
-        border-radius:5px;
-        margin-bottom:10px;
+
+        img {
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -82,6 +110,7 @@ include("connection/connect.php");
         </div>
     </nav>
 </header>
+
 <body style="background-image: url('images/pattern.png'); background-size: cover; background-position: center;">
     <div class="pen-title">
     </div>
@@ -97,8 +126,6 @@ include("connection/connect.php");
                             <form action="" method="post">
                                 <input type="text" placeholder="Username" name="username" class="form-control transparent-input" required />
                                 <input type="password" placeholder="Password" name="password" class="form-control transparent-input" required />
-                                <input type="text" id="captcha" name="captcha" placeholder="Enter the CAPTCHA" class="form-control transparent-input" required />
-                                <img src="captcha.php" alt="CAPTCHA"><br>
                                 <input type="submit" value="Login" name="submit" class="btn btn-warning btn-block" />
                             </form>
                         </div>
@@ -113,6 +140,6 @@ include("connection/connect.php");
     </section>
 </body>
 
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
 </html>

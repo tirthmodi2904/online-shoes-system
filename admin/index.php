@@ -4,29 +4,22 @@
 include("../connection/connect.php");
 error_reporting(0);
 session_start();
-if(isset($_POST['submit']))
-{
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	
-	if(!empty($_POST["submit"])) 
-     {
-	$loginquery ="SELECT * FROM admin WHERE username='$username' && password='".md5($password)."'";
-	$result=mysqli_query($db, $loginquery);
-	$row=mysqli_fetch_array($result);
-	
-	                        if(is_array($row))
-								{
-                                    	$_SESSION["adm_id"] = $row['adm_id'];
-										header("refresh:1;url=dashboard.php");
-	                            } 
-							else
-							    {
-										echo "<script>alert('Invalid Username or Password!');</script>"; 
-                                }
-	 }
-	
-	
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if (!empty($_POST["submit"])) {
+        $loginquery = "SELECT * FROM admin WHERE username='$username' && password='" . md5($password) . "'";
+        $result = mysqli_query($db, $loginquery);
+        $row = mysqli_fetch_array($result);
+
+        if (is_array($row)) {
+            $_SESSION["adm_id"] = $row['adm_id'];
+            header("refresh:1;url=dashboard.php");
+        } else {
+            echo "<script>alert('Invalid Username or Password!');</script>";
+        }
+    }
 }
 
 ?>

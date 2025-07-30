@@ -3,7 +3,6 @@ session_start();
 include("connection/connect.php");
 require "vendor/autoload.php"; // Include PHPMailer autoload file
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 if (isset($_POST['submit'])) {
     // Check if all fields are filled
